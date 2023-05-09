@@ -12,6 +12,15 @@
         android:theme="@style/Theme.HinoEDP"
         tools:targetApi="31">
         <activity
+            android:name=".List"
+            android:exported="false" />
+        <activity
+            android:name=".QualityControl"
+            android:exported="false" />
+        <activity
+            android:name=".EDPSetting"
+            android:exported="false" />
+        <activity
             android:name=".Login"
             android:exported="false" />
         <activity

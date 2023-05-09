@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Hino EDP</string>
+    <string name="login_toolbar">Login</string>
+    <string name="main_toolbar">Main Menu</string>
+    <string name="edp_toolbar">EDP Setting</string>
+    <string name="qc_toolbar">Quality Control</string>
 </resources>
