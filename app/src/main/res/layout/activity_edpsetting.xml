@@ -34,7 +34,7 @@
             android:textSize="16sp"/>
 
         <EditText
-            android:id="@+id/editText_serial_kanban"
+            android:id="@+id/textview_date"
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_weight="0.6"
@@ -146,6 +146,7 @@
             android:textSize="16sp"/>
 
         <EditText
+            android:id="@+id/editText_skb"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.6"
@@ -178,7 +179,7 @@
             android:textSize="16sp"/>
 
         <TextView
-            android:id="@+id/textView_partNo"
+            android:id="@+id/textview_partNo"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.6"
@@ -212,7 +213,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/textView_totalReceive"
+            android:id="@+id/textview_totaledp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"

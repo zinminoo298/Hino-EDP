@@ -34,7 +34,18 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
+    //Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+
+    //LifeCycleScope
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+
+    //Libs
+    implementation files('libs/jtds-1.3.1.jar')
+    implementation files('libs/mysql-connector-java-5.1.23-bin.jar')
+
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
+    implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
