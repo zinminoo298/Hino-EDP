@@ -4,4 +4,5 @@
     <string name="main_toolbar">Main Menu</string>
     <string name="edp_toolbar">EDP Setting</string>
     <string name="qc_toolbar">Quality Control</string>
+    <string name="setting_toolbar">Setting</string>
 </resources>
