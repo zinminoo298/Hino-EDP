@@ -150,6 +150,7 @@
             android:layout_weight="0.6"
             android:layout_gravity="center"
             android:paddingLeft="10dp"
+            android:singleLine="true"
             android:textCursorDrawable="@drawable/cursor_color"
             android:background="@android:drawable/editbox_background"/>
     </LinearLayout>

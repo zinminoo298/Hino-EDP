@@ -10,6 +10,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.TextView
+import com.example.hinoedp.Model.ListModel
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.*
@@ -27,6 +28,7 @@ class Gvariable {
         var conn: Connection? = null
         var driver = "net.sourceforge.jtds.jdbc.Driver"
         var connURL = ""
+        var searchOrderList = ArrayList<ListModel>()
     }
 
     fun startConn(){

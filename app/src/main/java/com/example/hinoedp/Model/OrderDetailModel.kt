@@ -2,12 +2,12 @@ package com.example.hinoedp.Model
 
 class OrderDetailModel {
     var pId:String? = null
-    var orderDetailI:String? = null
+    var orderDetailID:String? = null
     var orderNo:String? = null
     var serialNo:String? = null
     var packingDate:String? = null
     var receiveDate:String? = null
-    var edpSetting:String? = null
+    var edpSettingDate:String? = null
     var edpQualityCheckDate:String? = null
     var edpStatus:String? = null
     var edpQualityCheckStatus:String? = null
@@ -31,12 +31,12 @@ class OrderDetailModel {
         qty: Int?
     ) {
         this.pId = pId
-        this.orderDetailI = orderDetailI
+        this.orderDetailID = orderDetailI
         this.orderNo = orderNo
         this.serialNo = serialNo
         this.packingDate = packingDate
         this.receiveDate = receiveDate
-        this.edpSetting = edpSetting
+        this.edpSettingDate = edpSetting
         this.edpQualityCheckDate = edpQualityCheckDate
         this.edpStatus = edpStatus
         this.edpQualityCheckStatus = edpQualityCheckStatus
