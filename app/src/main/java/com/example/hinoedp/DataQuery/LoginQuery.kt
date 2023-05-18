@@ -35,21 +35,21 @@ class LoginQuery(private val context: Context, private val username: String, pri
             if(result.next()){
 
                 if (result.getString("UserName") == null) {
-                    Gvariable.userRealName = ""
+                    Gvariable.userName = ""
                 } else {
-                    Gvariable.userRealName = result.getString("UserName")
+                    Gvariable.userName = result.getString("UserName").trim()
                 }
 
                 if (result.getString("FullName") == null) {
-                    Gvariable.userName = ""
+                    Gvariable.userRealName = ""
                 } else {
-                    Gvariable.userName = result.getString("FullName")
+                    Gvariable.userRealName = result.getString("FullName").trim()
                 }
 
                 if (result.getString("Type") == null) {
                     Gvariable.type = ""
                 } else {
-                    Gvariable.type = result.getString("Type")
+                    Gvariable.type = result.getString("Type").trim()
                 }
             }
             else{

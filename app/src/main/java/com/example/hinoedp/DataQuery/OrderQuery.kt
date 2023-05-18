@@ -151,6 +151,23 @@ class OrderQuery {
         return status
     }
 
+    fun updateOrderProcessEDPQC(orderProcessId:String, orderStatus:String) : Boolean{
+        return try{
+            Gvariable().startConn()
+            val statement = Gvariable.conn!!.createStatement()
+            val sql = "update [OrderProcess] set " +
+                    " EDPQualityCheckDate = getdate(), EDPQualityCheckBy = '${Gvariable.userName}', EDPQualityCheckStatus= '$orderStatus', " +
+                    " LastEditBy = '${Gvariable.userName}', LastEditDate = getdate() " +
+                    " where PId = '$orderProcessId' "
+            statement.executeUpdate(sql)
+            true
+        }catch (e:Exception){
+            e.printStackTrace()
+            Gvariable.conn!!.close()
+            false
+        }
+    }
+
     fun updateOrderProcessEDPSetting(orderProcessId:String, orderStatus:String) : Boolean{
         return try{
             Gvariable().startConn()

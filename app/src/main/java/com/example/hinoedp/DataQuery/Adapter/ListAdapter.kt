@@ -1,4 +1,4 @@
-package com.example.hinoedp.Adapter
+package com.example.hinoedp.DataQuery.Adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -21,13 +21,13 @@ class ListAdapter (private var Dataset:ArrayList<ListModel>, private val context
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ListAdapter.MyViewHolder {
+    ): MyViewHolder {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.list_row, parent, false)
         return MyViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ListAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val textViewNo = holder.textViewNo
         val textViewPartNo = holder.textViewPartNo
         val textViewQty = holder.textViewQty

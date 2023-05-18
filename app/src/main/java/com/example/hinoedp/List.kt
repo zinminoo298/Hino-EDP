@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.hinoedp.Adapter.ListAdapter
+import com.example.hinoedp.DataQuery.Adapter.ListAdapter
 import com.example.hinoedp.Model.ListModel
 
 class List : AppCompatActivity() {

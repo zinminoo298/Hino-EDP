@@ -265,9 +265,9 @@ class EDPSetting : AppCompatActivity() {
         val dialog = builder.create()
         dialog.show()
         dialog.setCancelable(false)
-        val buttonYes = findViewById<Button>(R.id.button_yes)
-        val buttonNo = findViewById<Button>(R.id.button_no)
-        val textView = findViewById<TextView>(R.id.textview_text)
+        val buttonYes = view.findViewById<Button>(R.id.button_yes)
+        val buttonNo = view.findViewById<Button>(R.id.button_no)
+        val textView = view.findViewById<TextView>(R.id.textview_text)
 
         textView.text = text
 
@@ -277,10 +277,27 @@ class EDPSetting : AppCompatActivity() {
             } else{
                 spinnerStatus.selectedItem.toString()
             }
-            //update and write log
-            OrderQuery().updateOrderProcessEDPSetting(orderDetailList[0].pId!!, edpStatus)
-            OrderQuery().writeLog("Scan EDP Program", "Order Process", "Re-Scan change EDP status  : ${editTextViewSKB.text.toString().trim()}", editTextViewSKB.text.toString().trim(), Gvariable.userName!!)
-            textViewPartNo.text = orderDetailList[0].partNo
+
+            val deferred = lifecycleScope.async(Dispatchers.IO) {
+                //update and write log
+                OrderQuery().updateOrderProcessEDPSetting(orderDetailList[0].pId!!, edpStatus)
+                OrderQuery().writeLog("Scan EDP Program", "Order Process", "Re-Scan change EDP status  : ${editTextViewSKB.text.toString().trim()}", editTextViewSKB.text.toString().trim(), Gvariable.userName!!)
+            }
+            lifecycleScope.launch(Dispatchers.Main) {
+                if (deferred.isActive) {
+                    val progressDialogBuilder = Gvariable().createProgressDialog(this@EDPSetting)
+
+                    try {
+                        progressDialogBuilder.show()
+                        deferred.await()
+                    } finally {
+                        textViewPartNo.text = orderDetailList[0].partNo
+                        progressDialogBuilder.cancel()
+                    }
+                } else {
+                    deferred.await()
+                }
+            }
             dialog.dismiss()
         }
 

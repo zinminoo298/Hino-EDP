@@ -16,7 +16,7 @@
 
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/layout_setting"
+            android:id="@+id/cardView_back"
             android:layout_marginStart="10dp"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -31,7 +31,7 @@
             <RelativeLayout
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:foreground="@mipmap/phonelink"
+                android:foreground="@mipmap/arrow_back"
                 android:layout_gravity="center"/>
         </androidx.cardview.widget.CardView>
 
