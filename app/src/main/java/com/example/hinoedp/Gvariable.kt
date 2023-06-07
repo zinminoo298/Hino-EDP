@@ -28,6 +28,7 @@ class Gvariable {
         var conn: Connection? = null
         var driver = "net.sourceforge.jtds.jdbc.Driver"
         var connURL = ""
+        var accessList = ArrayList<String>()
         var searchOrderList = ArrayList<ListModel>()
     }
 
@@ -35,7 +36,7 @@ class Gvariable {
         Class.forName(driver)
         properties = Properties()
         properties!!["connectTimeout"] = "2000"
-        DriverManager.setLoginTimeout(3)
+        DriverManager.setLoginTimeout(5)
         conn = DriverManager.getConnection(connURL, properties)
     }
 

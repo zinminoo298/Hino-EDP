@@ -131,7 +131,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:gravity="center"
-        android:text="Last update: 09/05/2023"
+        android:text="Last update: 01/06/2023"
         android:textColor="@color/red"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -15,6 +15,7 @@ class LoginQuery(private val context: Context, private val username: String, pri
         val driverClass = "net.sourceforge.jtds.jdbc.Driver"
         var conn: Connection? = null
         var result: ResultSet? = null
+        var accessResultSet: ResultSet? = null
         val policy =
             StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
@@ -50,6 +51,15 @@ class LoginQuery(private val context: Context, private val username: String, pri
                     Gvariable.type = ""
                 } else {
                     Gvariable.type = result.getString("Type").trim()
+                }
+
+                val sql1 = "SELECT Menu.MenuName, MenuAuth.UserName, MenuAuth.MenuID " +
+                        "  FROM MenuAuth INNER JOIN  Menu ON MenuAuth.MenuID = Menu.MenuID " +
+                        "  Where UserName = '${Gvariable.userName}'"
+                accessResultSet = statement.executeQuery(sql1)
+                Gvariable.accessList.clear()
+                while(accessResultSet.next()){
+                    Gvariable.accessList.add(accessResultSet.getString("MenuID"))
                 }
             }
             else{

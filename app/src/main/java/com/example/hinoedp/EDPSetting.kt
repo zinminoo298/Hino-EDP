@@ -6,21 +6,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.lifecycleScope
 import com.example.hinoedp.DataQuery.OrderQuery
-import com.example.hinoedp.Model.ListModel
 import com.example.hinoedp.Model.OrderDetailModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.List
 
 
 class EDPSetting : AppCompatActivity() {
@@ -30,17 +28,18 @@ class EDPSetting : AppCompatActivity() {
         lateinit var textViewTotalEDP: TextView
         lateinit var spinnerOrderNo: Spinner
         lateinit var spinnerStatus: Spinner
-        lateinit var editTextViewSKB: TextView
+        lateinit var editTextViewSKB: EditText
         lateinit var buttonList: Button
+        lateinit var cardViewBack : CardView
         var initialDate:String? = null
         var chosenDate:String? = null
         var orderNoList = ArrayList<String>()
         var statusList = ArrayList<String>()
         var orderDetailList = ArrayList<OrderDetailModel>()
         val c = Calendar.getInstance()
-        var year = c.get(Calendar.YEAR)
-        var month = c.get(Calendar.MONTH)
-        var day = c.get(Calendar.DAY_OF_MONTH)
+        var year = 0
+        var month = 0
+        var day = 0
         var strTotal = ""
         var edpStatus:String = ""
     }
@@ -55,16 +54,24 @@ class EDPSetting : AppCompatActivity() {
         spinnerStatus = findViewById(R.id.spinner_status)
         editTextViewSKB = findViewById(R.id.editText_skb)
         buttonList = findViewById(R.id.button_list)
+        cardViewBack = findViewById(R.id.cardView_back)
 
+        editTextViewSKB.setSelectAllOnFocus(true)
+
+        year = c.get(Calendar.YEAR)
+        month = c.get(Calendar.MONTH)
+        day = c.get(Calendar.DAY_OF_MONTH)
+
+        statusList.clear()
         statusList.add("Select")
         statusList.add("OK")
         statusList.add("NG")
         statusList.add("Repair")
         loadSpinnerStatus()
+        loadSpinnerOrderNo()
 
         textViewDate.text = "${String.format("%02d",day)}/${String.format("%02d",month+1)}/$year"
-
-        spinnerOrderOnChange()
+        editTextViewSKB.nextFocusDownId = editTextViewSKB.id
 
         textViewDate.setOnClickListener {
             datePicker()
@@ -75,20 +82,69 @@ class EDPSetting : AppCompatActivity() {
         }
 
         editTextViewSKB.setOnKeyListener(View.OnKeyListener { _, _, event ->
+            println(event.keyCode)
+            println(event.keyCharacterMap)
             if (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-                editTextViewSKB.text = editTextViewSKB.text.toString().uppercase()
-                if(spinnerOrderNo.selectedItemPosition != 0){
+                editTextViewSKB.setText(editTextViewSKB.text.toString().uppercase())
+
+                if(spinnerOrderNo.selectedItemPosition != 0 && spinnerStatus.selectedItemPosition != 0){
                     asyncScanSKB()
                 }
                 else{
                     Gvariable().alarm(this)
-                    Gvariable().messageAlertDialog(this, "กรุณาเลือกเลขที่ Order", layoutInflater)
+                    if(spinnerOrderNo.selectedItemPosition == 0){
+                        spinnerOrderNo.requestFocus()
+                        Gvariable().messageAlertDialog(this, "กรุณาเลือกเลขที่ Order", layoutInflater)
+                    }
+                    else{
+                        spinnerStatus.requestFocus()
+                        Gvariable().messageAlertDialog(this, "โปรดเลือก Status", layoutInflater)
+                    }
+
                 }
-                editTextViewSKB.setSelectAllOnFocus(true)
                 editTextViewSKB.requestFocus()
+                editTextViewSKB.selectAll()
             }
             false
         })
+
+
+
+        spinnerOrderNo.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parentView: AdapterView<*>?,
+                selectedItemView: View?,
+                position: Int,
+                id: Long
+            ) {
+                spinnerStatus.setSelection(1)
+                editTextViewSKB.requestFocus()
+                editTextViewSKB.selectAll()
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>?) {
+            }
+        }
+
+        spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parentView: AdapterView<*>?,
+                selectedItemView: View?,
+                position: Int,
+                id: Long
+            ) {
+                editTextViewSKB.selectAll()
+                editTextViewSKB.requestFocus()
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>?) {
+            }
+        }
+
+        cardViewBack.setOnClickListener{
+            finish()
+            super.onBackPressed()
+        }
 
     }
 
@@ -104,12 +160,15 @@ class EDPSetting : AppCompatActivity() {
             asyncListOrderNo("$year${String.format("%02d",month+1)}${String.format("%02d",day)}")
         }, year, month, day)
         dpd.show()
+
+
     }
 
     private fun asyncListOrderNo(orderDate:String){
         val deferred = lifecycleScope.async(Dispatchers.IO) {
             orderNoList.clear()
             orderNoList = OrderQuery().showOrder(orderDate)
+            println(orderNoList.size)
         }
 
         lifecycleScope.launch(Dispatchers.Main) {
@@ -141,22 +200,6 @@ class EDPSetting : AppCompatActivity() {
         spinnerStatus.adapter = arrayAdapter
     }
 
-    private fun spinnerOrderOnChange(){
-        spinnerOrderNo.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parentView: AdapterView<*>?,
-                selectedItemView: View?,
-                position: Int,
-                id: Long
-            ) {
-                spinnerStatus.setSelection(0)
-            }
-
-            override fun onNothingSelected(parentView: AdapterView<*>?) {
-            }
-        }
-    }
-
     private fun asyncScanSKB(){
         val deferred = lifecycleScope.async(Dispatchers.IO) {
             scanSKB()
@@ -170,14 +213,12 @@ class EDPSetting : AppCompatActivity() {
                     progressDialogBuilder.show()
                     deferred.await()
                 } finally {
-                    editTextViewSKB.setSelectAllOnFocus(true)
-                    editTextViewSKB.requestFocus()
                     progressDialogBuilder.cancel()
                     if(edpStatus.isNotEmpty()){
                         if(edpStatus != spinnerStatus.selectedItem.toString()){
                             if(edpStatus == "Repair" || edpStatus == "OK" || edpStatus == "NG"){
                                 //show dialog
-                                alertDialog("ต้องการเปลี่ยนสถานะหรือไม่ ($edpStatus -> ${spinnerStatus.selectedItem.toString()})")
+                                alertDialog("ต้องการเปลี่ยนสถานะหรือไม่ \n($edpStatus -> ${spinnerStatus.selectedItem.toString()})")
                             }
                             else{
                                 Gvariable().alarm(this@EDPSetting)
@@ -189,6 +230,8 @@ class EDPSetting : AppCompatActivity() {
                             Gvariable().messageAlertDialog(this@EDPSetting, "ชิ้นงานผ่านตรวจรับ EDP แล้ว (Receive EDP Process)", layoutInflater)
                         }
                     }
+                    editTextViewSKB.selectAll()
+                    editTextViewSKB.requestFocus()
                 }
             } else {
                 deferred.await()
@@ -303,6 +346,8 @@ class EDPSetting : AppCompatActivity() {
 
         buttonNo.setOnClickListener {
             dialog.dismiss()
+            editTextViewSKB.selectAll()
+            editTextViewSKB.requestFocus()
         }
     }
 

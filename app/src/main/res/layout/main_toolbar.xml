@@ -31,7 +31,7 @@
             <RelativeLayout
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:foreground="@mipmap/phonelink"
+                android:foreground="@mipmap/home"
                 android:layout_gravity="center"/>
         </androidx.cardview.widget.CardView>
 
